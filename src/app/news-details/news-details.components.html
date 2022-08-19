@@ -1,0 +1,112 @@
+<div id="modal-content-wrapper">
+    <header id="modal-header">
+        <button type="button" class="close" (click)="onClose('')" aria-label="Close">
+            <span aria-hidden="true" style="font-weight: bolder; font-size: xx-large;line-height: 30px !important;">&times;</span>
+        </button>
+    </header>
+    <section id="modal-body">
+        <div id="newsContent" *ngIf="news$ as news">
+            <div id="ContentPlaceHolder1_mansetDiv" class="sliderrr-wrapper" [ngStyle]="sliderWrapperStyle">
+                <div class="bx-wrapper">
+                    <div #carouselWrapper class="carousel-wrapper" [ngStyle]="carouselWrapperStyle">
+                        <ul class="carousel-inner" #carousel [ngStyle]="carouselWrapStyle">
+                            <li class="media-image" *ngFor="let review of news.mediaReviews"
+                                [ngSwitch]="review.has_medium">
+                                <app-media-source *ngSwitchCase="false" [review]="getReview(review)">
+                                </app-media-source>
+                                <app-files-list *ngSwitchCase="true" [thumbName]="'medium-' + review.file_name">
+                                </app-files-list>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bx-controls bx-has-controls-direction">
+                        <div class="bx-controls-direction">
+                            <a class="bx-prev"  (click)="prev()">Prev</a><a class="bx-next"
+                                 (click)="next()">Next</a>
+                        </div>
+                    </div>
+                </div>
+                <div id="sliderrr-pager">
+                    <ul class="sliderrr-page" #slider [ngStyle]="carouselPagerStyle">
+                        <li *ngFor="let thumbFile of news.mediaReviews; index as i" class="{{i===0?'active':''}}">
+                            <a (click)="currentDiv(i)" style="margin-left: 5px;">
+                                <app-files-list [thumbName]="'thumb-kapak-' + thumbFile.file_name"></app-files-list>
+                            </a>
+                        </li>
+                    </ul>
+                    <div style="position: relative">
+                            <a class="slider-bx-prev"  (click)="sliderPrev()">Prev</a><a class="slider-bx-next"
+                                 (click)="sliderNext()">Next</a>
+                    </div>
+                </div>
+            </div>
+            <div class="preknow">
+                <span class='date pre'>{{news.date | date:'medium'}}</span>
+                <span class="pre bet">|</span>
+                <span class="own pre">
+                    <button (click)="onClose(loggedID&&loggedID===news.ownerId?'/user':'/allusers/'+news.owner)" type="button" class="butto ripple button-outline"
+                        style="margin-top: -3px; padding: 10px 10px !important;">{{ news.owner }}</button></span>
+                <span class="pre bet">|</span>
+                <span class="social pre">
+                    <button type="button" (click)="setSocial()" class="butto ripple button-outline" style="margin-top: -3px;padding: 10px 10px !important;">Paylaş</button>   
+                </span>
+                <span class="pre bet">|</span>
+                <span class="pre" style="margin-top: 10px;"> {{ newsCounts.get(news.id) }}</span>
+            </div>
+            <app-media-social [social]="social"></app-media-social>
+            <h2>
+                <span class="text" *ngIf="news.topic.charAt(0)!=='#'">{{news.topic.split('#')[0]}}</span>
+                <span class="text" *ngFor="let tag of news.tags; let i = index">
+                    <a class="tag" (click)="onTagClick(tag);$event.stopPropagation();$event.preventDefault()"
+                        style="font-weight: 600;color: #666666; cursor: pointer;"> {{tag}} </a>
+                    {{news.topic.split('#')[i + 1].replace(news.tags[i].substring(1), '')}}
+                </span>
+            </h2>
+            <!-- <div>
+                        <iframe #myframe id="youtu" width='560' height='315' src="" frameborder='0' allow='accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
+                    </div> -->
+            <div id="mihtml" style="padding-top: 20px"></div>
+            <div id="newsTags" style="margin-bottom: 20px">
+                <label *ngFor="let tag of news.tags"><button> {{tag}} ; </button></label>
+            </div>
+            <app-comments [url]="'url(' + news.ownerUrl + ')'" [isDetail]="true" [newsId]="news.id"></app-comments>
+        </div>
+        <!-- <div style="display: flex; justify-content: space-evenly; width: 100%; margin-top: 25px;">
+            <mat-form-field class="my-options">
+                <mat-label>Select your language</mat-label>
+                <mat-select role="listbox" [(value)]="currentLanguage">
+                    <mat-option role="option" *ngFor="let language of languages" [value]="language"
+                        (click)="onSelectLanguage(language)" [aria-label]="language">
+                        {{language}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div style="width: 95%; padding: 20px; display: flex; flex-direction: row;justify-content: space-around">
+            <div style="align-items: flex-start; padding-top: 20px;">
+                <button id="micro1" #startButton [disabled]="startButtonDisabled" type="button" class="butto ripple button-outline"
+                    (click)="startCamera()">Start Microphone</button>
+            </div>
+            <div style="align-items: flex-end;">
+                <form>
+                    <mat-form-field class="speech-result-width" [style.min-width.px]="itemWidth / 2">
+                        <mat-label>Speech Input Result</mat-label>
+                        <textarea #speechTextBox matInput [value]="(speechMessages|async)?.transcript"
+                            placeholder="Speech Input Result" disabled="true" cdkTextareaAutosize cdkAutosizeMinRows="2"
+                            cdkAutosizeMaxRows="5" style="text-align: center;"></textarea>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+        <div style="height: auto;max-height: 400px; width: 800px;max-width: 800px;display: flex;flex-direction: column; margin-bottom: 200px;">
+            <div style="flex-grow: 1; padding: 20px 30px; overflow: auto;">
+                <div #publicChatBox class="publicChatBox" contenteditable="true" style="display: flex; flex-direction: column;align-items: flex-end;"></div>
+            </div>
+        </div> -->
+    </section>
+    <footer id="modal-footer" style="display: flex;justify-content: space-between;">
+        <!-- <app-ngbd-modal-stacked></app-ngbd-modal-stacked> -->
+        <button id="closes" type="button" class="butto ripple button-outline" (click)="onClose('')">Close</button>
+        <app-news-manage *ngIf="isManager" [news]="news$"></app-news-manage>
+    </footer>
+</div>

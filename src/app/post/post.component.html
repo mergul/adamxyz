@@ -1,0 +1,47 @@
+<mat-card class="example-card" (click)="navigate()">
+    <mat-card-header style="display: flex;">
+      <!-- <button #miButton (mouseover)="over()" class="butto ripple button-outline" (click)="onClick('/allusers/'+ news.newsOwner, news.newsOwnerId);$event.stopPropagation();$event.preventDefault()"
+      style="float: right; border: none;display: flex;padding: revert;">
+      <div mat-card-avatar class="example-header-image" [style.background-image]="_url"></div>
+      <div>
+        <mat-card-title>{{news.newsOwner}}</mat-card-title><br>
+        <mat-card-subtitle>
+          <span class='date'>{{news.date | date:'medium'}}</span>
+        </mat-card-subtitle>
+      </div>
+      </button>
+      <div style="margin-left: auto;">
+        <mat-menu #appMenu="matMenu" xPosition="before">
+          <button mat-menu-item >Logout</button>
+          <button mat-menu-item >Settings</button>
+          <button mat-menu-item >Account</button>
+          <button mat-menu-item>Help</button>
+        </mat-menu>
+        <button class="menu" [matMenuTriggerFor]="appMenu" (click)="$event.stopPropagation();$event.preventDefault()" aria-label="Right Align">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" data-supported-dps="24x24" fill="currentColor" class="mercado-match" width="24" height="24" focusable="false">
+            <path d="M14 12a2 2 0 11-2-2 2 2 0 012 2zM4 10a2 2 0 102 2 2 2 0 00-2-2zm16 0a2 2 0 102 2 2 2 0 00-2-2z"></path>
+          </svg>
+        </button>
+      </div> -->
+    </mat-card-header>
+    <mat-card-content style="display: flex;">
+      <app-files-list [thumbName]="'thumb-kapak-' + (news.thumb ? news.thumb : 'bae.jpg')" style="margin-top: 0px;"></app-files-list>
+      <div class="malink" style="padding-left: 10px; width: auto;">
+        <h4 class="mahead">
+          <span class='date'>{{news.date | date:'medium'}}</span>
+          <br>
+            <span class="text" *ngIf="news.topic.charAt(0)!=='#'">{{news.topic.split('#')[0]}}</span>
+            <span class="text" *ngFor="let tag of news.topics; let i = index">
+                <a class="tag" (click)="onTagClick(tag);$event.stopPropagation();$event.preventDefault()"
+                    style="font-weight: 600;color: #641b7b"> {{tag}} </a>
+                {{news.topic.split('#')[i + 1].replace(news.topics[i].substring(1), '')}}
+            </span>
+        </h4>
+    </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <!-- <button class="butto ripple button-outline">LIKE</button>
+      <button class="butto ripple button-outline">SHARE</button> -->
+    </mat-card-actions>
+    <!-- <app-comments [url]="_url" [isDetail]="false" [newsId]="news.newsId"></app-comments> -->
+  </mat-card>

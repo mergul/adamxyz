@@ -1,0 +1,67 @@
+<mat-toolbar color="primary" class="example-toolbar">
+  <div id="hologo">
+    <button (click)="btnClick('/home')" id="mologo" class="mat-icon-button" aria-label="Left Align">
+      <div style="height: 66px;display: -webkit-box;width: 100%;justify-content: space-evenly;">
+        <div class="image"></div>
+        <span>Adam</span>
+      </div>
+    </button>
+  </div>
+  <div class="navbar">
+    <button #buttons mat-icon-button (click)="navClick(this.newsService.links[0])" class="active mat-icon-button"
+      matTooltip="search new contents" aria-label="Center Align" autofocus>
+      <mat-icon>home</mat-icon>
+    </button>
+    <button #buttons mat-icon-button (click)="navClick(this.newsService.links[1])" class="mat-icon-button"
+      style="border-left: 1px solid #6d6d6d;border-right: 1px solid #6d6d6d;" matTooltip="search new contents"
+      aria-label="Center Align" autofocus>
+      <mat-icon>filter</mat-icon>
+    </button>
+    <button #buttons mat-icon-button (click)="navClick(this.newsService.links[2])" class="mat-icon-button"
+      matTooltip="search new contents" aria-label="Center Align" autofocus>
+      <mat-icon>people</mat-icon>
+    </button>
+  </div>
+  <div id="hesp" [ngSwitch]="loggedinUser|async">
+    <br *ngIf="newsService.newsStreamCounts$ | async">
+    <div *ngSwitchCase="false" id="ltool">
+      <button *ngSwitchCase="false" class="login" (click)="btnClick('/search')" aria-label="Center Align">Ara</button>
+      <button *ngSwitchCase="true" mat-icon-button (click)="btnClick('/search')" class="mat-icon-button"
+        matTooltip="search new contents" aria-label="Center Align">
+        <mat-icon>search</mat-icon>
+      </button>
+      <button *ngSwitchCase="false" class="login" (click)="btnClick('/login')" aria-label="Center Align">Giriş</button>
+      <button *ngSwitchCase="true" mat-icon-button (click)="btnClick('/login')" class="mat-icon-button"
+        matTooltip="search new contents" aria-label="Center Align">
+        <mat-icon>vpn_key</mat-icon>
+      </button>
+      <button *ngSwitchCase="false" class="register" (click)="btnClick('/register')"
+        aria-label="Center Align">Kayıt</button>
+      <button *ngSwitchCase="true" mat-icon-button (click)="btnClick('/register')" class="mat-icon-button"
+        matTooltip="search new contents" aria-label="Center Align">
+        <mat-icon>group_add</mat-icon>
+      </button>
+    </div>
+    <app-logged-nav [logged]="loggedinUser|async" [isOpen]="isOpen" (logChange)="receiveMessage($event)" id="ltoolr">
+    </app-logged-nav>
+    <div class="menu" (click)="onMenu()">
+			<input #mainput type="checkbox" hidden id="hamburger" />
+			<label for="hamburger" [hidden]="isOpen">&#9776;</label>
+			<label for="hamburger" [hidden]="!isOpen">&#10006;</label>
+		</div>
+    <div *ngSwitchCase="false" class="dropdown" id="dropdown" [class.show]="isOpen">
+      <button mat-icon-button (click)="btnClick('/search')" class="mat-icon-button"
+        matTooltip="search new contents" aria-label="Center Align">
+        <mat-icon>search</mat-icon>Search
+      </button>
+      <button mat-icon-button (click)="btnClick('/login')" class="mat-icon-button"
+        matTooltip="search new contents" aria-label="Center Align">
+        <mat-icon>vpn_key</mat-icon>Login
+      </button>
+      <button mat-icon-button (click)="btnClick('/register')" class="mat-icon-button"
+      matTooltip="search new contents" aria-label="Center Align">
+      <mat-icon>group_add</mat-icon>Register
+      </button>
+  	</div>
+  </div>
+</mat-toolbar>
